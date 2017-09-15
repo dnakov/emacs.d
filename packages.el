@@ -6,9 +6,7 @@
   (define-key ivy-minibuffer-map (kbd "<left>") 'counsel-up-directory)
   (define-key ivy-minibuffer-map (kbd "<right>") 'ivy-alt-done))
 ;;  (ivy-set-sources 'ivy-switch-buffer '((original-source) 'counsel-file-jump)))
-(use-package ivy-rich
-;;  :defer t
-  :load-path "~/.emacs.d/lisp/ivy-rich.el")
+(use-package ivy-rich)
 (use-package counsel-projectile)
 (use-package counsel)
 (use-package smartscan)
