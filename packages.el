@@ -10,6 +10,8 @@
 (use-package counsel-projectile)
 (use-package counsel)
 (use-package smartscan)
+(use-package powerline)
+(use-package airline-themes)
 (use-package rjsx-mode
   :mode ("\\.js\\'" . rjsx-mode)
   :config

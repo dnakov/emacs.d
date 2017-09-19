@@ -18,8 +18,10 @@
 (load "~/.emacs.d/functions.el")
 (load "~/.emacs.d/packages.el")
 
-
 (load-theme 'dracula t)
+(load-theme 'airline-doom-one t)
+(global-linum-mode +1)
+(setq linum-format " %d ")
 (global-undo-tree-mode)
 (delete-selection-mode)
 (global-smartscan-mode) 
@@ -27,7 +29,7 @@
 (setq desktop-restore-eager 2)
 (ivy-mode 1)
 (counsel-projectile-on)
-
+(global-linum-mode +1)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq projectile-require-project-root nil)
