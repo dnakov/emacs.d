@@ -28,6 +28,8 @@
 (ivy-mode 1)
 (counsel-projectile-on)
 
+(setq make-backup-files nil)
+(setq auto-save-default nil)
 (setq projectile-require-project-root nil)
 (setq projectile-enable-caching t)
 (setq ivy-use-virtual-buffers t)
@@ -61,4 +63,6 @@
 (global-set-key (kbd "<A-down>") 'smartscan-symbol-go-forward)
 (global-set-key (kbd "<A-up>") 'smartscan-symbol-go-backward)
 (bind-key* "M-w" 'kill-this-buffer)
-
+(bind-key* "<escape>" 'keyboard-escape-quit)
+(bind-key* "M-f" 'swiper)
+(bind-key* "M-F" 'counsel-projectile-ag)
