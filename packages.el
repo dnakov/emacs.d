@@ -18,3 +18,4 @@
   (setq js2-strict-missing-semi-warning nil)
   (setq js-indent-level 2)
   (setq js2-missing-semi-one-line-override nil))
+(use-package drag-stuff)

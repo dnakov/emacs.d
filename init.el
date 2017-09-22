@@ -24,7 +24,8 @@
 (setq linum-format " %d ")
 (global-undo-tree-mode)
 (delete-selection-mode)
-(global-smartscan-mode) 
+(global-smartscan-mode)
+(drag-stuff-global-mode 1)
 (desktop-save-mode 1)
 (setq desktop-restore-eager 2)
 (ivy-mode 1)
@@ -64,7 +65,21 @@
 (global-set-key (kbd "<A-right>") 'forward-word)
 (global-set-key (kbd "<A-down>") 'smartscan-symbol-go-forward)
 (global-set-key (kbd "<A-up>") 'smartscan-symbol-go-backward)
+(bind-key* "<M-S-up>" 'drag-stuff-up)
+(bind-key* "<M-S-down>" 'drag-stuff-down)
+(bind-key* "<M-up>" 'beginning-of-buffer)
+(bind-key* "<M-down>" 'end-of-buffer)
+(bind-key* "M-a" 'mark-whole-buffer)
 (bind-key* "M-w" 'kill-this-buffer)
 (bind-key* "<escape>" 'keyboard-escape-quit)
 (bind-key* "M-f" 'swiper)
 (bind-key* "M-F" 'counsel-projectile-ag)
+(setq powerline-utf-8-separator-left        #xe0b0
+      powerline-utf-8-separator-right       #xe0b2
+      airline-utf-glyph-separator-left      #xe0b0
+      airline-utf-glyph-separator-right     #xe0b2
+      airline-utf-glyph-subseparator-left   #xe0b1
+      airline-utf-glyph-subseparator-right  #xe0b3
+      airline-utf-glyph-branch              #xe0a0
+      airline-utf-glyph-readonly            #xe0a2
+      airline-utf-glyph-linenumber          #xe0a1)
