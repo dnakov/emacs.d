@@ -19,3 +19,4 @@
   (setq js-indent-level 2)
   (setq js2-missing-semi-one-line-override nil))
 (use-package drag-stuff)
+(use-package magit)

@@ -83,3 +83,19 @@
       airline-utf-glyph-branch              #xe0a0
       airline-utf-glyph-readonly            #xe0a2
       airline-utf-glyph-linenumber          #xe0a1)
+(setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer
+         buffer
+         (cond ((and (derived-mode-p 'magit-mode)
+                     (eq (with-current-buffer buffer major-mode)
+                         'magit-status-mode))
+                nil)
+               ((memq (with-current-buffer buffer major-mode)
+                      '(magit-process-mode
+                        magit-revision-mode
+                        magit-diff-mode
+                        magit-stash-mode))
+                nil)
+               (t
+                '(display-buffer-same-window))))))
