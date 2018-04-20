@@ -10,8 +10,8 @@
 (use-package counsel-projectile)
 (use-package counsel)
 (use-package smartscan)
-(use-package powerline)
-(use-package airline-themes)
+;;(use-package powerline)
+;;(use-package airline-themes)
 (use-package rjsx-mode
   :mode ("\\.js\\'" . rjsx-mode)
   :config
@@ -20,3 +20,5 @@
   (setq js2-missing-semi-one-line-override nil))
 (use-package drag-stuff)
 (use-package magit)
+(use-package visual-fill-column)
+(use-package multiple-cursors)

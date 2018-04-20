@@ -1,25 +1,29 @@
 (setq default-directory "~/dev/")
 (require 'package)
-
+(require 'gnutls)
+(add-to-list 'gnutls-trustfiles
+             (expand-file-name
+              "./comodo.rsa.ca.intermediate.crt"))
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
+(global-visual-fill-column-mode)
 (eval-when-compile
   (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
 (load "~/.emacs.d/functions.el")
 (load "~/.emacs.d/packages.el")
-
+(setq sml/no-confirm-load-theme t)
+(sml/setup)
 (load-theme 'dracula t)
-(load-theme 'airline-doom-one t)
+;;(load-theme 'airline-doom-one t)
 (global-linum-mode +1)
 (setq linum-format " %d ")
 (global-undo-tree-mode)
@@ -29,8 +33,12 @@
 (desktop-save-mode 1)
 (setq desktop-restore-eager 2)
 (ivy-mode 1)
-(counsel-projectile-on)
+;;(counsel-projectile-on)
 (global-linum-mode +1)
+
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+
+(yas-global-mode 1)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq projectile-require-project-root nil)
@@ -48,8 +56,10 @@
 (setq web-mode-attr-indent-offset 2)
 (setq web-mode-markup-indent-offset 2)
 (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-
 (bind-key* "M-p" 'ivy-switch-buffer)
+(bind-key* "C-p" 'counsel-projectile-find-file)
+(bind-key* "M-r" 'counsel-imenu)
+(global-set-key (kbd "M-d") 'mc/mark-next-like-this)
 (global-set-key (kbd "M-s") 'save-buffer)
 (global-set-key (kbd "M-c") 'clipboard-kill-ring-save)
 (global-set-key (kbd "M-v") 'clipboard-yank)
@@ -99,3 +109,40 @@
                 nil)
                (t
                 '(display-buffer-same-window))))))
+(setq line-number-display-limit large-file-warning-threshold)
+(setq line-number-display-limit-width 200)
+
+(defun my--is-file-large ()
+  "If buffer too large and my cause performance issue."
+  (< large-file-warning-threshold (buffer-size)))
+
+(define-derived-mode my-large-file-mode fundamental-mode "LargeFile"
+  "Fixes performance issues in Emacs for large files."
+  ;; (setq buffer-read-only t)
+  (setq bidi-display-reordering nil)
+  (jit-lock-mode nil)
+  (buffer-disable-undo)
+  (set (make-variable-buffer-local 'global-hl-line-mode) nil)
+  (set (make-variable-buffer-local 'line-number-mode) nil)
+  (set (make-variable-buffer-local 'column-number-mode) nil) )
+
+(add-to-list 'magic-mode-alist (cons #'my--is-file-large #'my-large-file-mode))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(drag-stuff-global-mode t)
+ '(package-selected-packages
+   (quote
+    (yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Hack" :foundry "nil" :slant normal :weight normal :height 120 :width normal)))))
