@@ -37,6 +37,23 @@
 (global-linum-mode +1)
 
 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+(setq web-mode-content-types-alist
+      '(("jsx" . "\\.js[x]?\\'")))
+(add-hook 'web-mode-hook #'setup-tide-mode)
 
 (yas-global-mode 1)
 (setq make-backup-files nil)
@@ -139,7 +156,7 @@
  '(drag-stuff-global-mode t)
  '(package-selected-packages
    (quote
-    (yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))))
+    (web-mode company tide auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
