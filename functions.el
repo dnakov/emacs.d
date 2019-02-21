@@ -34,3 +34,7 @@ This command does not push text to `kill-ring'."
     (beginning-of-line 1)
     (setq p2 (point))
     (delete-region p1 p2)))
+
+(defun kill-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
