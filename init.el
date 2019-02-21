@@ -57,10 +57,17 @@
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
-;; (setq web-mode-content-types-alist
-;;       '(("jsx" . "\\.js[x]?\\'")))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(defun my-web-mode-hook ()  
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-attr-indent-offset 2)
+  (setq indent-tabs-mode nil)
+  (setq web-mode-markup-indent-offset 2))
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+(setq web-mode-content-types-alist
+      '(("jsx" . "\\.js[x]?\\'")))
 (add-hook 'web-mode-hook #'setup-tide-mode)
-(add-hook 'rjsx-mode-hook #'setup-tide-mode)
 
 (defun kill-whitespace-or-word ()
   (interactive)
@@ -80,6 +87,8 @@
 ;; 
 (yas-global-mode 1)
 (show-paren-mode)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq projectile-require-project-root nil)
@@ -89,16 +98,11 @@
 (setq x-select-enable-clipboard t)
 (setq x-select-enable-primary nil)
 (setq tab-width 2)
-(setq indent-tabs-mode nil)
 (setq js2-indent-level 2)
+(setq typescript-indent-level 2)
 (setq css-indent-offset 2)
-(setq ivy-initial-inputs-alist nil)
-;; (setq web-mode-code-indent-offset 2)
-;; (setq web-mode-css-indent-offset 2)
-;; (setq web-mode-attr-indent-offset 2)
-;; (setq web-mode-markup-indent-offset 2)
-(ivy-rich-mode 1)
-;;(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+
+(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
 (bind-key* "M-p" 'ivy-switch-buffer)
 (bind-key* "C-p" 'counsel-projectile-find-file)
 (bind-key* "M-r" 'counsel-imenu)
@@ -201,8 +205,7 @@
  '(drag-stuff-global-mode t)
  '(package-selected-packages
    (quote
-    (rust-mode smex rjsx-mode web-mode company tide auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan php-mode ivy-rich dracula-theme counsel-projectile)))
- '(typescript-indent-level 2))
+    (rust-mode web-mode company tide auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
