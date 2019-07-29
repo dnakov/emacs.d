@@ -1,3 +1,6 @@
+(setq exec-path (append exec-path '("/usr/local/bin")))
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'alt)
 (setq default-directory "~/dev/")
 (require 'package)
 (require 'gnutls)
@@ -14,24 +17,21 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; load Indium from its source code
-(add-to-list 'load-path "~/.emacs.d/packages/indium")
-(require 'indium)
-
 (global-visual-fill-column-mode)
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
 (require 'bind-key)
 (load "~/.emacs.d/functions.el")
 (load "~/.emacs.d/packages.el")
 (setq sml/no-confirm-load-theme t)
+(setq sml/theme 'respectful)
 (sml/setup)
 (savehist-mode 1)
-(load-theme 'dracula t)
+(load-theme 'base16-material-darker t)
 ;;(load-theme 'airline-doom-one t)
-(global-linum-mode +1)
+;;(global-display-line-numbers-mode 1)
 (setq linum-format " %d ")
+(setq column-number-mode t)
 (global-undo-tree-mode)
 (delete-selection-mode)
 (global-smartscan-mode)
@@ -39,21 +39,25 @@
 (desktop-save-mode 1)
 (setq desktop-restore-eager 2)
 (ivy-mode 1)
+(if (version< "27.0" emacs-version)
+           (set-fontset-font
+            "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
+         (set-fontset-font
+          t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend))
 ;;(counsel-projectile-on)
-(global-linum-mode +1)
-
+(setq tooltip-use-echo-area t)
 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
-  (company-mode +1))
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   ;; company is an optional dependency. You have to
+;;   ;; install it separately via package-install
+;;   ;; `M-x package-install [ret] company`
+;;   (company-mode +1))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -67,7 +71,7 @@
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 (setq web-mode-content-types-alist
       '(("jsx" . "\\.js[x]?\\'")))
-(add-hook 'web-mode-hook #'setup-tide-mode)
+;;(add-hook 'web-mode-hook #'setup-tide-mode)
 
 (defun kill-whitespace-or-word ()
   (interactive)
@@ -87,8 +91,18 @@
 ;; 
 (yas-global-mode 1)
 (show-paren-mode)
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-
+;;(add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; native line numbers
+;; (setq-default display-line-numbers 'visual
+;;               display-line-numbers-current-absolute t
+;;               display-line-numbers-width 1
+;;               display-line-numbers-widen t)
+;; (set-face-attribute 'line-number nil
+;; 		    :foreground "#565761"
+;; 		    :background "#282a36")
+;; (set-face-attribute 'line-number-current-line nil
+;; 		    :background "#565761"
+;; 		    :foreground "#282a36")
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq projectile-require-project-root nil)
@@ -102,7 +116,7 @@
 (setq typescript-indent-level 2)
 (setq css-indent-offset 2)
 
-(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+'(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
 (bind-key* "M-p" 'ivy-switch-buffer)
 (bind-key* "C-p" 'counsel-projectile-find-file)
 (bind-key* "M-r" 'counsel-imenu)
@@ -133,7 +147,6 @@
 (bind-key* "<escape>" 'keyboard-escape-quit)
 (bind-key* "M-f" 'swiper)
 (bind-key* "M-F" 'counsel-projectile-ag)
-(setq indium-client-debug t)
 (setq show-paren-style 'mixed)
 (setq powerline-utf-8-separator-left        #xe0b0
       powerline-utf-8-separator-right       #xe0b2
@@ -199,17 +212,30 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(drag-stuff-global-mode t)
+ '(fringe-mode '(4 . 4) nil (fringe))
+ '(js-indent-level 2)
+ '(lsp-ui-sideline-ignore-duplicate t)
+ '(lsp-ui-sideline-show-hover t)
+ '(lsp-ui-sideline-show-symbol t)
  '(package-selected-packages
-   (quote
-    (rust-mode web-mode company tide auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))))
+   '(company-tabnine ivy-posframe js-import base16-theme seti-theme atom-one-dark-theme night-owl-theme lsp-mode company-emoji smart-mode-line-atom-one-dark-theme graphql-mode restclient yafolding edbi sqlup-mode slime nodejs-repl smart-mode-line stylus-mode jade-mode pug-mode rust-mode web-mode company auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))
+ '(show-paren-mode t)
+ '(tooltip-mode nil)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-sql-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Hack" :foundry "nil" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Hack" :foundry "nil" :slant normal :weight normal :height 120 :width normal))))
+ '(ivy-posframe ((t (:inherit default :background "#44475a"))))
+ '(ivy-posframe-border ((t (:inherit default :background "gray50"))))
+ '(lsp-ui-peek-header ((t (:background "#44475a" :foreground "white"))))
+ '(lsp-ui-peek-highlight ((t (:background "#ffb86c" :distant-foreground "black" :foreground "black" :box (:line-width -1 :color "#ffb86c" :style pressed-button)))))
+ '(lsp-ui-peek-list ((t (:background "black"))))
+ '(lsp-ui-sideline-symbol ((t (:foreground "grey" :box (:line-width -1 :color "grey") :height 0.99)))))
 (put 'narrow-to-region 'disabled nil)
