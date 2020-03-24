@@ -4,7 +4,8 @@
 (use-package ivy
   :config
   (define-key ivy-minibuffer-map (kbd "<left>") 'counsel-up-directory)
-  (define-key ivy-minibuffer-map (kbd "<right>") 'ivy-alt-done))
+  (define-key ivy-minibuffer-map (kbd "<right>") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "M-v") 'yank))
 ;;  (ivy-set-sources 'ivy-switch-buffer '((original-source) 'counsel-file-jump)))
 (use-package ivy-rich
   :config (ivy-rich-mode)
@@ -26,8 +27,18 @@
 (use-package magit)
 (use-package visual-fill-column)
 (use-package multiple-cursors)
+
 (use-package lsp-mode
-  :hook (web-mode . lsp)
+  :config
+  (add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
+                    :major-modes '(svelte-mode)
+		    :priority 1
+                    :server-id 'svelteserver))  
+  :hook
+  (web-mode . lsp)
+  (svelte-mode . lsp)
   :commands lsp)
 
 ;; optionally
