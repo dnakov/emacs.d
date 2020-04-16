@@ -5,11 +5,8 @@
 (setq explicit-shell-file-name "/bin/zsh")
 (setq multi-term-program "/bin/zsh")
 (setq pop-up-windows nil)
-(define-derived-mode svelte-mode web-mode "svelte"
-  "major mode for editing svelte language code."
-  (emmet-mode)
-  )
-(provide 'svelte-mode)
+
+(server-start)
 (menu-bar-mode t)
 (require 'package)
 (require 'gnutls)
@@ -20,6 +17,7 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 ;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -37,9 +35,7 @@
 (sml/setup)
 (savehist-mode 1)
 (load-theme 'base16-material-darker t)
-;;(load-theme 'doom-dracula t)
-;;(load-theme 'airline-doom-one t)
-;;(global-display-line-numbers-mode 1)
+
 (setq linum-format " %d ")
 (setq column-number-mode t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
@@ -58,24 +54,21 @@
 ;;(counsel-projectile-on)
 (setq tooltip-use-echo-area t)
 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-;; (defun setup-tide-mode ()
-;;   (interactive)
-;;   (tide-setup)
-;;   (flycheck-mode +1)
-;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;   (eldoc-mode +1)
-;;   (tide-hl-identifier-mode +1)
-;;   ;; company is an optional dependency. You have to
-;;   ;; install it separately via package-install
-;;   ;; `M-x package-install [ret] company`
-;;   (company-mode +1))
 
-;; aligns annotation to the right hand side
+(define-derived-mode svelte-mode web-mode "svelte"
+  "major mode for editing svelte language code."
+  (emmet-mode)
+  )
+
+(setq web-mode-engines-alist
+      '(("svelte"    . "\\.svelte\\'"))
+      )
+
 (setq company-tooltip-align-annotations t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.svelte\\'" . svelte-mode))
-
-(defun my-web-mode-hook ()  
+(defun my-web-mode-hook ()
+  (setq web-mode-auto-quote-style 2)  
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-attr-indent-offset 2)
@@ -84,38 +77,12 @@
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 (setq web-mode-content-types-alist
       '(("jsx" . "\\.js[x]?\\'")))
-;;(add-hook 'web-mode-hook #'setup-tide-mode)
 
-(defun kill-whitespace-or-word ()
-  (interactive)
-  (if (looking-back "[ \t\n]")
-      (let ((p (point)))
-        (re-search-backward "[^ \t\n]" nil :no-error)
-        (forward-char)
-        (kill-region p (point)))
-    (kill-word 1)))
-
-(defun back-word ()
-  (interactive)
-  (forward-whitespace -1)
-;;  (re-search-backward "[ \t\n]" nil :no-error)
-;;  (forward-char)
-  )
 ;; 
 (yas-global-mode 1)
 (show-paren-mode)
-;;(add-hook 'typescript-mode-hook #'setup-tide-mode)
-;; native line numbers
-;; (setq-default display-line-numbers 'visual
-;;               display-line-numbers-current-absolute t
-;;               display-line-numbers-width 1
-;;               display-line-numbers-widen t)
-;; (set-face-attribute 'line-number nil
-;; 		    :foreground "#565761"
-;; 		    :background "#282a36")
-;; (set-face-attribute 'line-number-current-line nil
-;; 		    :background "#565761"
-;; 		    :foreground "#282a36")
+(global-company-mode)
+
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq projectile-require-project-root nil)
@@ -171,6 +138,7 @@
       airline-utf-glyph-branch              #xe0a0
       airline-utf-glyph-readonly            #xe0a2
       airline-utf-glyph-linenumber          #xe0a1)
+
 (setq magit-display-buffer-function
       (lambda (buffer)
         (display-buffer
@@ -187,39 +155,6 @@
                 nil)
                (t
                 '(display-buffer-same-window))))))
-(setq line-number-display-limit large-file-warning-threshold)
-(setq line-number-display-limit-width 200)
-(server-start)
-(defun my--is-file-large ()
-  "If buffer too large and my cause performance issue."
-  (< large-file-warning-threshold (buffer-size)))
-(defun er-indent-buffer ()
-  "Indent the currently visited buffer."
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-(defun er-indent-region-or-buffer ()
-  "Indent a region if selected, otherwise the whole buffer."
-  (interactive)
-  (save-excursion
-    (if (region-active-p)
-        (progn
-          (indent-region (region-beginning) (region-end))
-          (message "Indented selected region."))
-      (progn
-        (er-indent-buffer)
-        (message "Indented buffer.")))))
-(define-derived-mode my-large-file-mode fundamental-mode "LargeFile"
-  "Fixes performance issues in Emacs for large files."
-  ;; (setq buffer-read-only t)
-  (setq bidi-display-reordering nil)
-  (jit-lock-mode nil)
-  (buffer-disable-undo)
-  (set (make-variable-buffer-local 'global-hl-line-mode) nil)
-  (set (make-variable-buffer-local 'line-number-mode) nil)
-  (set (make-variable-buffer-local 'column-number-mode) nil) )
-
-(add-to-list 'magic-mode-alist (cons #'my--is-file-large #'my-large-file-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -231,12 +166,13 @@
  '(drag-stuff-global-mode t)
  '(fringe-mode '(4 . 4) nil (fringe))
  '(js-indent-level 2)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-ignore-duplicate t)
  '(lsp-ui-sideline-show-hover t)
  '(lsp-ui-sideline-show-symbol t)
  '(org-agenda-files '("~/dev/invisr/oli/TASKS.org"))
  '(package-selected-packages
-   '(atomic-chrome doom-themes company-tabnine ivy-posframe js-import base16-theme seti-theme atom-one-dark-theme night-owl-theme lsp-mode company-emoji smart-mode-line-atom-one-dark-theme graphql-mode restclient yafolding edbi sqlup-mode slime nodejs-repl smart-mode-line stylus-mode jade-mode pug-mode rust-mode web-mode company auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))
+   '(autopair atomic-chrome doom-themes company-tabnine ivy-posframe js-import base16-theme seti-theme atom-one-dark-theme night-owl-theme lsp-mode company-emoji smart-mode-line-atom-one-dark-theme graphql-mode restclient yafolding edbi sqlup-mode slime nodejs-repl smart-mode-line stylus-mode jade-mode pug-mode rust-mode web-mode company auto-complete yasnippet sr-speedbar prettier-js visual-fill-column coffee-mode markdown-mode+ markdown-mode emmet-mode multiple-cursors magit json-mode yaml-mode drag-stuff use-package undo-tree smartscan slack php-mode ivy-rich dracula-theme counsel-projectile))
  '(show-paren-mode t)
  '(tooltip-mode nil)
  '(undo-ask-before-discard t)

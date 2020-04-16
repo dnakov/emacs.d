@@ -14,44 +14,36 @@
 (use-package counsel)
 (use-package smex)
 (use-package smartscan)
-;;(use-package powerline)
-;;(use-package airline-themes)
-;; (use-package web-mode)			
-;; (use-package tide
-;;   :ensure t
-;;   :after (typescript-mode company flycheck)
-;;   :hook ((typescript-mode . tide-setup)
-;;          (typescript-mode . tide-hl-identifier-mode)
-;;          ))
+(use-package web-mode)			
 (use-package drag-stuff)
 (use-package magit)
 (use-package visual-fill-column)
 (use-package multiple-cursors)
 
-(use-package lsp-mode
-  :config
-  (add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
-                    :major-modes '(svelte-mode)
-		    :priority 1
-                    :server-id 'svelteserver))  
-  :hook
-  (web-mode . lsp)
-  (svelte-mode . lsp)
-  :commands lsp)
+;; (use-package lsp-mode
+;;   :config
+;;   ;;(add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte"))
+;;   ;; (lsp-register-client
+;;   ;;  (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
+;;   ;;                   :major-modes '(svelte-mode)
+;;   ;; 		    :priority 1
+;;   ;;                   :server-id 'svelteserver))  
+;;   :hook
+;;   (web-mode . lsp)
+;; ;;  (svelte-mode . lsp)
+;;   :commands lsp)
 
-;; optionally
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (setq lsp-ui-peek-fontify 'always))
+;;optionally
+;; (use-package bob
+;;   :commands bob-mode
+;;   :config
+;;   (define-key bob-mode-map [remap xref-find-definitions] #'bob-peek-find-definitions)
+;;   (define-key bob-mode-map [remap xref-find-references] #'bob-peek-find-references)
+;;   (setq bob-peek-fontify 'always))
 
 ;;(use-package company-lsp :commands company-lsp)
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package ivy-posframe
   :config
   (setq ivy-posframe-display-functions-alist
@@ -59,9 +51,7 @@
 	  (t . ivy-posframe-display-at-frame-center)))
   
   (ivy-posframe-mode 1))
-;; optionally if you want to use debugger
-;;(use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
 (use-package company-tabnine
   :ensure t
   :config
@@ -80,6 +70,7 @@
           company-pseudo-tooltip-frontend
           company-echo-metadata-frontend))
  )
+
 (use-package company
   :config
   (setq company-backends '(company-tabnine company-emoji)))
